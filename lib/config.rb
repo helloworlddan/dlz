@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './interface'
 
 # Configuration module for LZ

@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 # Module to standardize formats for CLI communication.
 module Interface
   PROMPT = 'LZ>'.freeze

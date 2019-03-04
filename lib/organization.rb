@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './interface'
 
 # Module to create the organization and organizational units

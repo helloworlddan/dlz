@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './interface'
 
 # Module to create accounts and attach them to the organization
