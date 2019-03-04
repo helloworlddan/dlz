@@ -2,29 +2,29 @@
 
 require 'thor'
 
-require_relative './lib/config'
-require_relative './lib/organization'
-require_relative './lib/accounts'
-require_relative './lib/resources'
+require_relative '../lib/config'
+require_relative '../lib/organization'
+require_relative '../lib/accounts'
+require_relative '../lib/resources'
 
 # Main Thor class for LZ
 class LZ < Thor
-  desc 'init', 'create new lz configuration skeleton'
+  desc 'init', 'Create new lz configuration skeleton'
   def init
     Config.new.init_skeleton
   end
 
-  desc 'organization', 'configure organization and organizational units'
+  desc 'organization', 'Configure organization and organizational units'
   def organization
     Organization.deploy
   end
 
-  desc 'accounts', 'create accounts and attach to organization'
+  desc 'accounts', 'Create accounts and attach to organization'
   def accounts
     Accounts.deploy
   end
 
-  desc 'resources', 'deploy resources per account'
+  desc 'resources', 'Deploy resources per account'
   def resources
     Resources.deploy
   end
