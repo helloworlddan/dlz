@@ -3,6 +3,7 @@ run:
 
 docs:
 	rdoc
+	open doc/index.html
 
 lint:
 	rubocop
