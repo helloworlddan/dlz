@@ -2,9 +2,10 @@
 
 require 'thor'
 
-require_relative 'lib/config'
-require_relative 'lib/organization'
-require_relative 'lib/accounts'
+require_relative './lib/config'
+require_relative './lib/organization'
+require_relative './lib/accounts'
+require_relative './lib/resources'
 
 # Main Thor class for LZ
 class LZ < Thor
