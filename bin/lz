@@ -10,6 +10,11 @@ class LZ < Thor
     Config.new.init_skeleton
   end
 
+  desc 'version', 'Print lz version info'
+  def version
+    Config.new.version
+  end
+
   desc 'organization', 'Configure organization and organizational units'
   def organization
     Organization.deploy

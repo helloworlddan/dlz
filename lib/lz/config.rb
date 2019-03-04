@@ -19,4 +19,8 @@ class Config
   def config_exists?
     true # TODO: check presence of config
   end
+
+  def version
+    Interface.info(message: "current version is lz-#{Gem.loaded_specs['lz'].version}")
+  end
 end
