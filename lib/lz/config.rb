@@ -1,6 +1,6 @@
-require_relative './interface'
+require 'lz/interface'
 
-# Configuration module for LZ
+# Configuration class for LZ
 class Config
   attr_reader :data
 

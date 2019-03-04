@@ -1,4 +1,4 @@
-require_relative './interface'
+require 'lz/interface'
 
 # Module to deploy resources to individual accounts
 module Resources

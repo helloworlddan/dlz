@@ -1,4 +1,4 @@
-require_relative './interface'
+require 'lz/interface'
 
 # Module to create accounts and attach them to the organization
 module Accounts

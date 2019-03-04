@@ -1,4 +1,4 @@
-require_relative './interface'
+require 'lz/interface'
 
 # Module to create the organization and organizational units
 module Organization
