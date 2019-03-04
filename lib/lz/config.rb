@@ -2,25 +2,24 @@ require 'lz/interface'
 
 # Configuration class for LZ
 class Config
-  attr_reader :data
+  class << self; attr_accessor :data end
+  @data = {}
 
-  def initialize
-    @data = {}
-  end
-
-  def init_skeleton
+  def init
     Interface.error(message: 'config seems to already exist!') if config_exists?
-  end
-
-  def load_config
-    puts 'load_config' # TODO: Load config into data, use metaprogrammiong to create interfaces?
-  end
-
-  def config_exists?
-    true # TODO: check presence of config
   end
 
   def version
     Interface.info(message: "current version is lz-#{Gem.loaded_specs['lz'].version}")
+  end
+
+  def load
+    puts 'load_config' # TODO: Load config into data, use metaprogramming to create interfaces?
+  end
+
+  private
+
+  def config_exists?
+    true # TODO: check presence of config
   end
 end

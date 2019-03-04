@@ -7,12 +7,12 @@ require 'lz'
 class LZ < Thor
   desc 'init', 'Create new lz configuration skeleton'
   def init
-    Config.new.init_skeleton
+    Config.init
   end
 
   desc 'version', 'Print lz version info'
   def version
-    Config.new.version
+    Config.version
   end
 
   desc 'organization', 'Configure organization and organizational units'
