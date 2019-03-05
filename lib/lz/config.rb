@@ -1,25 +1,39 @@
 require 'lz/interface'
+require 'yaml'
+require 'fileutils'
 
 # Configuration class for LZ
 class Config
   class << self; attr_accessor :data end
   @data = {}
 
-  def init
-    Interface.error(message: 'config seems to already exist!') if config_exists?
+  def self.init
+    return Interface.error(message: 'config seems to already exist!') if config?
+
+    FileUtils.mkdir_p("#{Dir.pwd}/config/")
+    FileUtils.mkdir_p("#{Dir.pwd}/templates/")
+    FileUtils.cp(
+      "#{File.expand_path(File.dirname(__dir__))}/init/lz.yaml",
+      "#{Dir.pwd}/config/lz.yaml"
+    )
+    Interface.info(message: 'created new default configuration.')
   end
 
-  def version
-    Interface.info(message: "current version is lz-#{Gem.loaded_specs['lz'].version}")
+  def self.version
+    Interface.info(
+      message: "current version is lz-#{Gem.loaded_specs['lz'].version}"
+    )
   end
 
-  def load
-    puts 'load_config' # TODO: Load config into data, use metaprogramming to create interfaces?
+  def self.load
+    @data = YAML.load_file("#{Dir.pwd}/config/lz.yaml") if @data.empty?
+    @data
   end
 
-  private
+  def self.config?
+    return true if File.directory?("#{Dir.pwd}/config/")
+    return true if File.directory?("#{Dir.pwd}/templates/")
 
-  def config_exists?
-    true # TODO: check presence of config
+    false
   end
 end

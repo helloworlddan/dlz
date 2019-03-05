@@ -1,0 +1,11 @@
+# This is the central config for lz.
+
+# Specify a common prefix which lz will attempt to prepend to all resources.
+lz_prefix: 'lz' 
+
+# Account ID of organization master payer, this will be setup as organization root.
+master_payer_account_id: 123456789012
+
+# Choose the name of the IAM role which lz will provision to deploy your landing zone.
+lz_admin_role_name: 'lzadm'
+
