@@ -1,5 +1,6 @@
+require 'lz/accounts'
 require 'lz/config'
 require 'lz/interface'
 require 'lz/organization'
-require 'lz/accounts'
+require 'lz/renderer'
 require 'lz/resources'

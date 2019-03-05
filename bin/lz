@@ -21,6 +21,11 @@ class LZ < Thor
     Config.version
   end
 
+  desc 'render', 'Render CloudFormation templates for lz and local resources'
+  def render
+    Renderer.render_lz
+  end
+
   desc 'organization COMMAND', 'Configure organization and organizational units'
   long_desc <<-LONGDESC
     Manage AWS Organization and organizational units.

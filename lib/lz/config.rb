@@ -1,4 +1,3 @@
-require 'erb'
 require 'fileutils'
 require 'lz/interface'
 require 'awesome_print'
@@ -17,7 +16,6 @@ class Config
       "#{lz_init_path}/lz.yaml",
       "#{local_path}/lz.yaml"
     )
-    render_templates
     Interface.info(message: 'created new default configuration.')
   end
 
@@ -51,19 +49,6 @@ class Config
     return true if File.directory?(local_template_path)
 
     false
-  end
-
-  def self.render_templates
-    cfg = Config.load
-    Dir.glob("#{lz_template_path}/*.erb") do |path|
-      template = IO.read(path)
-      render = ERB.new(template).result(binding)
-      bare_filename = File.basename(path, File.extname(path))
-      new_path = "#{local_lz_template_path}/#{bare_filename}.yaml"
-      File.open(new_path, 'w') do |file|
-        file.write(render)
-      end
-    end
   end
 
   def self.lz_init_path

@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
     'lib/templates/admin_role.erb',
     'lib/lz.rb',
     'lib/lz/config.rb',
+    'lib/lz/renderer.rb',
     'lib/lz/accounts.rb',
     'lib/lz/interface.rb',
     'lib/lz/organization.rb',
