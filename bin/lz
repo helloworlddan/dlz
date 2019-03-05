@@ -2,7 +2,6 @@
 
 require 'thor'
 require 'lz'
-require 'pp'
 
 # Main Thor class for LZ
 class LZ < Thor
@@ -27,13 +26,13 @@ class LZ < Thor
   end
 
   desc 'organization COMMAND', 'Configure organization and organizational units'
-  long_desc <<-LONGDESC
+  long_desc <<-DESC
     Manage AWS Organization and organizational units.
     Commands:
       - 'deploy':  lz will try to deploy the organization and it's structure as
                    configured in the configuration.
       - 'destroy': lz will attempt to destroy the organization completely.
-  LONGDESC
+  DESC
   def organization(command)
     cfg = Config.load
     return Organization.deploy(config: cfg) if command.casecmp('deploy').zero?
@@ -43,14 +42,14 @@ class LZ < Thor
   end
 
   desc 'accounts COMMAND', 'Create accounts and attach to organization'
-  long_desc <<-LONGDESC
+  long_desc <<-DESC
     Create and configure AWS accounts to the currently configured organization.
     Commands:
       - 'deploy':  lz will attempt to configure all accounts as configured and
                    will try to enroll them into the organization at the specific
                    organizational units.
       - 'destroy': lz will suspend accounts.
-  LONGDESC
+  DESC
   def accounts(command)
     cfg = Config.load
     return Accounts.deploy(config: cfg) if command.casecmp('deploy').zero?
@@ -60,13 +59,13 @@ class LZ < Thor
   end
 
   desc 'resources COMMAND', 'Deploy resources per account'
-  long_desc <<-LONGDESC
+  long_desc <<-DESC
     Manage AWS resources according to configuration.
     Commands:
       - 'deploy':  lz will try to deploy all defined stacks and provision
                    resources into AWS accounts.
       - 'destroy': lz will collapse all stacks and destroy all resources.
-  LONGDESC
+  DESC
   def resources(command)
     cfg = Config.load
     return Resources.deploy(config: cfg) if command.casecmp('deploy').zero?
