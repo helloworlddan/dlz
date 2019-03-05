@@ -21,7 +21,7 @@ class Config
 
   def self.version
     Interface.info(
-      message: "current version is lz-#{Gem.loaded_specs['lz'].version}"
+      message: "current version is 'lz-#{Gem.loaded_specs['lz'].version}'"
     )
   end
 

@@ -23,7 +23,7 @@ class LZ < Thor
 
   desc 'render', 'Render CloudFormation templates for lz and local resources'
   def render
-    Renderer.render_lz
+    Renderer.render_all
   end
 
   desc 'organization COMMAND', 'Configure organization and organizational units'
