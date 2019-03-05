@@ -10,7 +10,7 @@ class Config
   @data = {}
 
   def self.init
-    return Interface.error(message: 'config seems to already exist!') if config?
+    return Interface.panic(message: 'config seems to already exist!') if config?
 
     FileUtils.mkdir_p(local_lz_template_path)
     FileUtils.cp(
@@ -32,11 +32,14 @@ class Config
   end
 
   def self.load
+    unless File.exist?("#{local_path}/lz.yaml")
+      return Interface.panic(message: 'no config file found. try `lz init`.')
+    end
+
     if @data.empty?
       # Load, deserialize and symbolize keys
-      @data = YAML.load_file(
-        "#{local_path}/lz.yaml"
-      ).each_with_object({}) do |(key, value), obj|
+      @data = YAML.load_file("#{local_path}/lz.yaml")
+                  .each_with_object({}) do |(key, value), obj|
         obj[key.to_sym] = value
       end
     end

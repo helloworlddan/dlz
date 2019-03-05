@@ -9,11 +9,16 @@ module Interface
     print(message: message, level: :info)
   end
 
+  def self.warn(message: 'something almost terrible happened.')
+    print(message: message, level: :warn)
+  end
+
   def self.error(message: 'something terrible happened.')
     print(message: message, level: :error)
   end
 
-  def self.warn(message: 'something almost terrible happened.')
-    print(message: message, level: :warn)
+  def self.panic(message: 'something really fucked up happened.')
+    print(message: message, level: :error)
+    exit(-1)
   end
 end
