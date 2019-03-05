@@ -22,11 +22,11 @@ module Renderer
     Dir.glob("#{source}/*.erb") do |path|
       template = IO.read(path)
       render = ERB.new(template).result(binding)
-      bare_filename = File.basename(path, File.extname(path))
-      new_path = "#{sink}/#{bare_filename}.yaml"
+      new_path = "#{sink}/#{File.basename(path, File.extname(path))}.yaml"
       File.open(new_path, 'w') do |file|
         file.write(render)
       end
+      Interface.info(message: "RENDER #{path} => #{new_path}")
     end
   end
 end
