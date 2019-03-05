@@ -12,11 +12,12 @@ class Config
   def self.init
     return Interface.error(message: 'config seems to already exist!') if config?
 
-    FileUtils.mkdir_p("#{Dir.pwd}/templates/")
+    FileUtils.mkdir_p(local_lz_template_path)
     FileUtils.cp(
-      "#{File.expand_path(File.dirname(__dir__))}/init/lz.yaml",
-      "#{Dir.pwd}/lz.yaml"
+      "#{lz_init_path}/lz.yaml",
+      "#{local_path}/lz.yaml"
     )
+    render_templates
     Interface.info(message: 'created new default configuration.')
   end
 
@@ -34,7 +35,7 @@ class Config
     if @data.empty?
       # Load, deserialize and symbolize keys
       @data = YAML.load_file(
-        "#{Dir.pwd}/lz.yaml"
+        "#{local_path}/lz.yaml"
       ).each_with_object({}) do |(key, value), obj|
         obj[key.to_sym] = value
       end
@@ -43,9 +44,42 @@ class Config
   end
 
   def self.config?
-    return true if File.exist?("#{Dir.pwd}/lz.yaml")
-    return true if File.directory?("#{Dir.pwd}/templates/")
+    return true if File.exist?("#{local_path}/lz.yaml")
+    return true if File.directory?(local_template_path)
 
     false
+  end
+
+  def self.render_templates
+    cfg = Config.load
+    Dir.glob("#{lz_template_path}/*.erb") do |path|
+      template = IO.read(path)
+      render = ERB.new(template).result(binding)
+      bare_filename = File.basename(path, File.extname(path))
+      new_path = "#{local_lz_template_path}/#{bare_filename}.yaml"
+      File.open(new_path, 'w') do |file|
+        file.write(render)
+      end
+    end
+  end
+
+  def self.lz_init_path
+    "#{File.expand_path(File.dirname(__dir__))}/init"
+  end
+
+  def self.lz_template_path
+    "#{File.expand_path(File.dirname(__dir__))}/templates"
+  end
+
+  def self.local_path
+    Dir.pwd
+  end
+
+  def self.local_template_path
+    "#{local_path}/templates"
+  end
+
+  def self.local_lz_template_path
+    "#{local_path}/templates/lz"
   end
 end

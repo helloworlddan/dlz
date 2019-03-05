@@ -1,0 +1,27 @@
+Description: >
+  This stack will provision the admin role which LZ will use to deploy the landing zone.
+
+Resources:
+  lzadm:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /lz/admin/
+      RoleName: lzadm
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              AWS: arn:aws:iam::<%= cfg[:root_account_id] %>:root
+            Condition:
+              StringEquals:
+                sts:ExternalId: "<%= cfg[:sts_external_id] %>"
+      Policies:
+        - PolicyName: lzadm-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: "*"
+                Resource: "*"

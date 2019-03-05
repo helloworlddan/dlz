@@ -7,7 +7,17 @@ Gem::Specification.new do |s|
   s.authors     = ['Daniel Stamer']
   s.email       = 'dan@hello-world.sh'
   s.executables << 'lz'
-  s.files       = %w[bin/lz lib/init/lz.yaml lib/lz.rb lib/lz/config.rb lib/lz/accounts.rb lib/lz/interface.rb lib/lz/organization.rb lib/lz/resources.rb]
+  s.files = [
+    'bin/lz',
+    'lib/init/lz.yaml',
+    'lib/templates/admin_role.erb',
+    'lib/lz.rb',
+    'lib/lz/config.rb',
+    'lib/lz/accounts.rb',
+    'lib/lz/interface.rb',
+    'lib/lz/organization.rb',
+    'lib/lz/resources.rb'
+  ]
   s.homepage    =
     'https://hello-world.sh'
   s.license     = 'MIT'
