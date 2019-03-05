@@ -19,16 +19,6 @@ class Config
     Interface.info(message: 'created new default configuration.')
   end
 
-  def self.version
-    Interface.info(
-      message: "current version is 'lz-#{Gem.loaded_specs['lz'].version}'"
-    )
-  end
-
-  def self.print
-    ap load
-  end
-
   def self.load
     unless File.exist?("#{local_path}/lz.yaml")
       return Interface.panic(message: 'no config file found. try `lz init`.')
@@ -38,10 +28,20 @@ class Config
       # Load, deserialize and symbolize keys
       @data = YAML.load_file("#{local_path}/lz.yaml")
                   .each_with_object({}) do |(key, value), obj|
-        obj[key.to_sym] = value
-      end
+                    obj[key.to_sym] = value
+                  end
     end
     @data
+  end
+
+  def self.version
+    Interface.info(
+      message: "current version is 'lz-#{Gem.loaded_specs['lz'].version}'"
+    )
+  end
+
+  def self.print
+    ap load
   end
 
   def self.config?

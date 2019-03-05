@@ -2,9 +2,6 @@ init:
 	gem install bundler
 	bundle install
 
-run:
-	bin/lz
-
 docs:
 	rdoc
 	open doc/index.html
@@ -20,3 +17,6 @@ package:
 
 install: package
 	gem install lz-*.gem
+
+publish: package
+	gem push lz-*.gem
