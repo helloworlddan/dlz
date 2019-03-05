@@ -2,12 +2,18 @@
 
 require 'thor'
 require 'lz'
+require 'pp'
 
 # Main Thor class for LZ
 class LZ < Thor
   desc 'init', 'Create new lz configuration skeleton'
   def init
     Config.init
+  end
+
+  desc 'config', 'Inspect lz configuration'
+  def config
+    Config.print
   end
 
   desc 'version', 'Print lz version info'

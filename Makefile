@@ -1,3 +1,7 @@
+init:
+	gem install bundler
+	bundle install
+
 run:
 	bin/lz
 
