@@ -46,7 +46,6 @@ class Config
 
   def self.config?
     return true if File.exist?("#{local_path}/lz.yaml")
-    return true if File.directory?(local_template_path)
 
     false
   end

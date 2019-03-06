@@ -30,6 +30,7 @@ module Renderer
   end
 
   def self.render_all
+    FileUtils.mkdir_p(Config.local_lz_template_path)
     render_lz
     render_local
   end
@@ -38,7 +39,7 @@ module Renderer
     cfg = Config.load
     Dir.glob("#{source[:path]}/*.erb") do |path|
       template = IO.read(path)
-      render = ERB.new(template).result(binding)
+      render = ERB.new(template, nil, '-').result(binding)
       n_path = "#{sink[:path]}/#{File.basename(path, File.extname(path))}.yaml"
       File.open(n_path, 'w') do |file|
         file.write(render)

@@ -7,3 +7,11 @@ root_account_id: 123456789012
 # Pre-configured external ID to harden access to cross-account admin role.
 # CHANGE THIS!
 sts_external_id: 'change-me'
+
+# List of roles which will be assumed by the development teams. lz will deploy
+# it's own resources and protect them from modification by these roles.
+restricted_roles:
+ - ReadOnly
+ - Developer
+ - Administrator
+
