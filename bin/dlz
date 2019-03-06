@@ -35,10 +35,9 @@ class DLZ < Thor
       - 'query':   `dlz` will query information about the current organization.
   DESC
   def organization(command)
-    cfg = Config.load
-    return Organization.deploy(config: cfg) if command.casecmp('deploy').zero?
-    return Organization.destroy(config: cfg) if command.casecmp('destroy').zero?
-    return Organization.query(config: cfg) if command.casecmp('query').zero?
+    return Organization.deploy if command.casecmp('deploy').zero?
+    return Organization.destroy if command.casecmp('destroy').zero?
+    return Organization.query if command.casecmp('query').zero?
 
     Interface.error(message: "unable to understand '#{command}'")
   end
@@ -53,9 +52,8 @@ class DLZ < Thor
       - 'destroy': `dlz` will suspend accounts.
   DESC
   def accounts(command)
-    cfg = Config.load
-    return Accounts.deploy(config: cfg) if command.casecmp('deploy').zero?
-    return Accounts.destroy(config: cfg) if command.casecmp('destroy').zero?
+    return Accounts.deploy if command.casecmp('deploy').zero?
+    return Accounts.destroy if command.casecmp('destroy').zero?
 
     Interface.error(message: "unable to understand '#{command}'")
   end
@@ -69,9 +67,8 @@ class DLZ < Thor
       - 'destroy': `dlz` will collapse all stacks and destroy all resources.
   DESC
   def resources(command)
-    cfg = Config.load
-    return Resources.deploy(config: cfg) if command.casecmp('deploy').zero?
-    return Resources.destroy(config: cfg) if command.casecmp('destroy').zero?
+    return Resources.deploy if command.casecmp('deploy').zero?
+    return Resources.destroy if command.casecmp('destroy').zero?
 
     Interface.error(message: "unable to understand '#{command}'")
   end

@@ -4,16 +4,18 @@ require 'dlz/interface'
 
 # Module to create the organization and organizational units
 module Organization
-  def self.deploy(config:)
-    create_root(config: config) unless root_exists?(config: config)
+  def self.deploy
+    create_root unless root_exists?
     # TODO: continue
   end
 
-  def self.destroy(*)
-    Interface.error(message: 'I am not implemented yet!') # TODO: implement me
+  def self.destroy
+    # TODO: implement me
+    Interface.error(message: 'I am not implemented yet!')
   end
 
-  def self.create_root(config:)
+  def self.create_root
+    config = Config.load
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
@@ -25,7 +27,8 @@ module Organization
     data[:id]
   end
 
-  def self.root_exists?(config:)
+  def self.root_exists?
+    config = Config.load
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
@@ -33,21 +36,21 @@ module Organization
     rescue Aws::Organizations::Errors::AWSOrganizationsNotInUseException
       return false
     end
-    # ALSO CHECK FOR EQUALITY WITH CURRENT CALLER
-    return true if data[:master_account_id] == config[:root_account_id].to_s
-
-    # ALSO CHECK FOR EQUALITY WITH CURRENT CALLER
-
-    if data[:master_account_id] != config[:root_account_id]
-      Interface.warn(message: 'org root different from `dlz` configuration!')
+    # Check if current org root, configured org root and calling account are all
+    # the same.
+    if data[:master_account_id].to_i == config[:root_account_id]
+      AND data[:master_account_id].to_i == environment[:account]
+      return true
+    else
+      Interface.warn(
+        message: 'org_root or account different from `dlz` configuration!'
+      )
     end
     false
   end
 
-  def self.query(config:)
-    unless root_exists?(config: config)
-      return Interface.panic(message: 'organization unusable')
-    end
+  def self.query
+    return Interface.panic(message: 'organization unusable') unless root_exists?
 
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = client.describe_organization.to_h[:organization]
