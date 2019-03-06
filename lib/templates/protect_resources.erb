@@ -1,0 +1,70 @@
+Description: > 
+  This stack will restrict modification of lz deployed resources.
+
+Resources:
+  lzprotectpolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: This policy will restrict modification of lz deployed resources.
+      ManagedPolicyName: lz-restriction-policy
+      Roles: 
+<% cfg[:restricted_roles].each do |role| -%>
+        - <%= role %>
+<% end -%>
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Deny
+            Action:
+              - iam:DeleteRole
+              - iam:UpdateRole
+              - iam:UpdateRoleDescription
+            Resources:
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/lzadm'
+<% cfg[:restricted_roles].each do |role| -%>
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/<%= role %>'
+<% end -%>
+          - Effect: Deny
+            Action:
+              - 'organzations:*'
+              - iam:AddUserToGroup
+              - iam:AttachGroupPolicy
+              - iam:AttachUserPolicy
+              - iam:ChangePassword
+              - iam:CreateAccessKey
+              - iam:CreateAccountAlias
+              - iam:CreateGroup
+              - iam:CreateLoginProfile
+              - iam:CreateOpenIDConnectProvider
+              - iam:CreateSAMLProvider
+              - iam:CreateUser
+              - iam:CreateVirtualMFADevice
+              - iam:DeleteAccountAlias
+              - iam:DeleteAccountPasswordPolicy
+              - iam:DeleteGroup
+              - iam:DeleteLoginProfile
+              - iam:DeleteOpenIdConnectProvider
+              - iam:DeleteSAMLProvider
+              - iam:DeleteUser
+              - iam:DeleteUserPermissionBoundary
+              - iam:DeleteUserPolicy
+              - iam:DetachUserPolicy
+              - iam:EnableMFADevice
+              - iam:PutGroupPolicy
+              - iam:PutUserPermissionBoundary
+              - iam:PutUserPolicy
+              - iam:RemoveClientIDFromOpenIDConnectProvider
+              - iam:RemoveUserFromGroup
+              - iam:ResyncMFADevice
+              - iam:SetDefaultPolicyVersion
+              - iam:TagUser
+              - iam:UntagUser
+              - iam:UpdateAccessKey
+              - iam:UpdateAccountPasswordPolicy
+              - iam:UpdateGroup
+              - iam:UpdateLoginProfile
+              - iam:UpdateOpenIDConnectProviderThumbprint
+              - iam:UpdateSAMLProvider
+              - iam:UpdateUser
+            Resources:
+              - '*'
