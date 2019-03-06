@@ -1,6 +1,6 @@
 # Module to standardize formats for CLI communication.
 module Interface
-  PROMPT = 'LZ>'.freeze
+  PROMPT = 'DLZ>'.freeze
   def self.print(message: 'something happened.', level: :info)
     puts "#{PROMPT} #{level.to_s.upcase}: #{message.downcase}"
   end

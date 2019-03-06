@@ -1,13 +1,13 @@
 Description: > 
-  This stack will restrict modification of lz deployed resources.
+  This stack will restrict modification of `dlz` deployed resources.
 
 Resources:
-  lzprotectpolicy:
+  dlzprotectpolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      Description: This policy will restrict modification of lz deployed resources.
-      ManagedPolicyName: lz-restriction-policy
-      Roles: 
+      Description: This policy will restrict modification of `dlz` deployed resources.
+      ManagedPolicyName: dlz-restriction-policy
+      Roles:
 <% cfg[:restricted_roles].each do |role| -%>
         - <%= role %>
 <% end -%>
@@ -20,7 +20,7 @@ Resources:
               - iam:UpdateRole
               - iam:UpdateRoleDescription
             Resources:
-              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/lzadm'
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/dlzadm'
 <% cfg[:restricted_roles].each do |role| -%>
               - !Sub 'arn:aws:iam::${AWS::AccountId}:role/<%= role %>'
 <% end -%>

@@ -1,17 +1,17 @@
 require 'erb'
-require 'lz/config'
-require 'lz/interface'
+require 'dlz/config'
+require 'dlz/interface'
 require 'pathname'
 
 # Module to render cloudformation templates
 module Renderer
-  def self.render_lz
+  def self.render_dlz
     render(source: {
-             path: Config.lz_template_path,
-             root: Config.lz_path,
-             id: :lz
+             path: Config.dlz_template_path,
+             root: Config.dlz_path,
+             id: :dlz
            }, sink: {
-             path: Config.local_lz_template_path,
+             path: Config.local_dlz_template_path,
              root: Config.local_path,
              id: :local
            })
@@ -30,8 +30,8 @@ module Renderer
   end
 
   def self.render_all
-    FileUtils.mkdir_p(Config.local_lz_template_path)
-    render_lz
+    FileUtils.mkdir_p(Config.local_dlz_template_path)
+    render_dlz
     render_local
   end
 

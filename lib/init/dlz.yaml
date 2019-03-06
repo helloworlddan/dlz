@@ -1,4 +1,4 @@
-# This is the central config for lz.
+# This is the central config for `dlz`.
 
 # Account ID of organization master payer, this will be setup as organization
 # root. It will also act as trusted authority to assume the admin roles from.
@@ -8,7 +8,7 @@ root_account_id: 123456789012
 # CHANGE THIS!
 sts_external_id: 'change-me'
 
-# List of roles which will be assumed by the development teams. lz will deploy
+# List of roles which will be assumed by the development teams. `dlz` will deploy
 # it's own resources and protect them from modification by these roles.
 restricted_roles:
  - ReadOnly

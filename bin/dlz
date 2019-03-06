@@ -1,26 +1,26 @@
 #!/usr/bin/env ruby
 
 require 'thor'
-require 'lz'
+require 'dlz'
 
-# Main Thor class for LZ
-class LZ < Thor
-  desc 'init', 'Create new lz configuration skeleton'
+# Main Thor class for `dlz`
+class DLZ < Thor
+  desc 'init', 'Create new `dlz` configuration skeleton'
   def init
     Config.init
   end
 
-  desc 'config', 'Inspect lz configuration'
+  desc 'config', 'Inspect `dlz` configuration'
   def config
     Config.print
   end
 
-  desc 'version', 'Print lz version info'
+  desc 'version', 'Print `dlz` version info'
   def version
     Config.version
   end
 
-  desc 'render', 'Render CloudFormation templates for lz and local resources'
+  desc 'render', 'Render CloudFormation templates for `dlz` and local resources'
   def render
     Renderer.render_all
   end
@@ -29,9 +29,9 @@ class LZ < Thor
   long_desc <<-DESC
     Manage AWS Organization and organizational units.
     Commands:
-      - 'deploy':  lz will try to deploy the organization and it's structure as
+      - 'deploy':  `dlz` will try to deploy the organization and it's structure as
                    configured in the configuration.
-      - 'destroy': lz will attempt to destroy the organization completely.
+      - 'destroy': `dlz` will attempt to destroy the organization completely.
   DESC
   def organization(command)
     cfg = Config.load
@@ -45,10 +45,10 @@ class LZ < Thor
   long_desc <<-DESC
     Create and configure AWS accounts to the currently configured organization.
     Commands:
-      - 'deploy':  lz will attempt to configure all accounts as configured and
+      - 'deploy':  `dlz` will attempt to configure all accounts as configured and
                    will try to enroll them into the organization at the specific
                    organizational units.
-      - 'destroy': lz will suspend accounts.
+      - 'destroy': `dlz` will suspend accounts.
   DESC
   def accounts(command)
     cfg = Config.load
@@ -62,9 +62,9 @@ class LZ < Thor
   long_desc <<-DESC
     Manage AWS resources according to configuration.
     Commands:
-      - 'deploy':  lz will try to deploy all defined stacks and provision
+      - 'deploy':  `dlz` will try to deploy all defined stacks and provision
                    resources into AWS accounts.
-      - 'destroy': lz will collapse all stacks and destroy all resources.
+      - 'destroy': `dlz` will collapse all stacks and destroy all resources.
   DESC
   def resources(command)
     cfg = Config.load
@@ -75,4 +75,4 @@ class LZ < Thor
   end
 end
 
-LZ.start(ARGV)
+DLZ.start(ARGV)

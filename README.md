@@ -1,3 +1,3 @@
-# lz - highly-opinionated AWS Landing Zone bootstrapping tool
+# dlz - Dan's LZ: highly-opinionated AWS Landing Zone bootstrapping tool
 
-`lz` bootstraps AWS organizations and accounts.
+`dlz` bootstraps AWS organizations and accounts.

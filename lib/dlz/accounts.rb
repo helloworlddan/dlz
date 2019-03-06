@@ -1,7 +1,7 @@
-require 'lz/interface'
+require 'dlz/interface'
 
-# Module to create the organization and organizational units
-module Organization
+# Module to create accounts and attach them to the organization
+module Accounts
   def self.deploy(*)
     Interface.error(message: 'I am not implemented yet!') # TODO: implement me
   end

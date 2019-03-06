@@ -10,13 +10,13 @@ lint:
 	rubocop
 
 clean:
-	rm -rf doc lz-*.gem
+	rm -rf doc dlz-*.gem
 
 package:
-	gem build lz.gemspec
+	gem build dlz.gemspec
 
 install: package
-	gem install lz-*.gem
+	gem install dlz-*.gem
 
 publish: package
-	gem push lz-*.gem
+	gem push dlz-*.gem

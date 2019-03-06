@@ -1,9 +1,9 @@
 require 'fileutils'
-require 'lz/interface'
+require 'dlz/interface'
 require 'awesome_print'
 require 'yaml'
 
-# Configuration singleton for LZ
+# Configuration singleton for `dlz`
 class Config
   class << self; attr_accessor :data end
   @data = {}
@@ -11,22 +11,22 @@ class Config
   def self.init
     return Interface.panic(message: 'config seems to already exist!') if config?
 
-    FileUtils.mkdir_p(local_lz_template_path)
+    FileUtils.mkdir_p(local_dlz_template_path)
     FileUtils.cp(
-      "#{lz_init_path}/lz.yaml",
-      "#{local_path}/lz.yaml"
+      "#{dlz_init_path}/dlz.yaml",
+      "#{local_path}/dlz.yaml"
     )
     Interface.info(message: 'created new default configuration.')
   end
 
   def self.load
-    unless File.exist?("#{local_path}/lz.yaml")
-      return Interface.panic(message: 'no config file found. try `lz init`.')
+    unless File.exist?("#{local_path}/dlz.yaml")
+      return Interface.panic(message: 'no config file found. try `dlz init`.')
     end
 
     if @data.empty?
       # Load, deserialize and symbolize keys
-      @data = YAML.load_file("#{local_path}/lz.yaml")
+      @data = YAML.load_file("#{local_path}/dlz.yaml")
                   .each_with_object({}) do |(key, value), obj|
                     obj[key.to_sym] = value
                   end
@@ -36,7 +36,7 @@ class Config
 
   def self.version
     Interface.info(
-      message: "current version is 'lz-#{Gem.loaded_specs['lz'].version}'"
+      message: "current version is 'dlz-#{Gem.loaded_specs['dlz'].version}'"
     )
   end
 
@@ -45,28 +45,28 @@ class Config
   end
 
   def self.config?
-    return true if File.exist?("#{local_path}/lz.yaml")
+    return true if File.exist?("#{local_path}/dlz.yaml")
 
     false
   end
 
-  def self.lz_path
+  def self.dlz_path
     File.expand_path(File.dirname(__dir__))
   end
 
-  def self.lz_init_path
-    "#{lz_path}/#{lz_init_path_trailing}"
+  def self.dlz_init_path
+    "#{dlz_path}/#{dlz_init_path_trailing}"
   end
 
-  def self.lz_init_path_trailing
+  def self.dlz_init_path_trailing
     'init'
   end
 
-  def self.lz_template_path
-    "#{lz_path}/#{lz_template_path_trailing}"
+  def self.dlz_template_path
+    "#{dlz_path}/#{dlz_template_path_trailing}"
   end
 
-  def self.lz_template_path_trailing
+  def self.dlz_template_path_trailing
     'templates'
   end
 
@@ -82,11 +82,11 @@ class Config
     'templates'
   end
 
-  def self.local_lz_template_path
-    "#{local_path}/#{local_lz_template_path_trailing}"
+  def self.local_dlz_template_path
+    "#{local_path}/#{local_dlz_template_path_trailing}"
   end
 
-  def self.local_lz_template_path_trailing
-    'templates/lz'
+  def self.local_dlz_template_path_trailing
+    'templates/dlz'
   end
 end
