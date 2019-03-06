@@ -1,5 +1,6 @@
 require 'awesome_print'
 require 'aws-sdk-organizations'
+require 'dlz/environment'
 require 'dlz/interface'
 
 # Module to create the organization and organizational units
@@ -28,7 +29,6 @@ module Organization
   end
 
   def self.root_exists?
-    config = Config.load
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
@@ -38,8 +38,8 @@ module Organization
     end
     # Check if current org root, configured org root and calling account are all
     # the same.
-    if data[:master_account_id].to_i == config[:root_account_id]
-      AND data[:master_account_id].to_i == environment[:account]
+    if data[:master_account_id].to_i == Config.load[:root_account_id]
+      AND data[:master_account_id].to_i == Environment.load[:account]
       return true
     else
       Interface.warn(

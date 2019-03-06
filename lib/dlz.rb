@@ -1,5 +1,6 @@
 require 'dlz/accounts'
 require 'dlz/config'
+require 'dlz/environment'
 require 'dlz/interface'
 require 'dlz/organization'
 require 'dlz/renderer'
