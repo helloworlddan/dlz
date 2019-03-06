@@ -40,7 +40,7 @@ class Config
     )
   end
 
-  def self.print
+  def self.query
     ap load
   end
 

@@ -12,7 +12,7 @@ class DLZ < Thor
 
   desc 'config', 'Inspect `dlz` configuration'
   def config
-    Config.print
+    Config.query
   end
 
   desc 'version', 'Print `dlz` version info'
@@ -32,11 +32,13 @@ class DLZ < Thor
       - 'deploy':  `dlz` will try to deploy the organization and it's structure as
                    configured in the configuration.
       - 'destroy': `dlz` will attempt to destroy the organization completely.
+      - 'query':   `dlz` will query information about the current organization.
   DESC
   def organization(command)
     cfg = Config.load
     return Organization.deploy(config: cfg) if command.casecmp('deploy').zero?
     return Organization.destroy(config: cfg) if command.casecmp('destroy').zero?
+    return Organization.query(config: cfg) if command.casecmp('query').zero?
 
     Interface.error(message: "unable to understand '#{command}'")
   end
