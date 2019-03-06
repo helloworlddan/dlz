@@ -51,12 +51,24 @@ class Config
     false
   end
 
+  def self.lz_path
+    File.expand_path(File.dirname(__dir__))
+  end
+
   def self.lz_init_path
-    "#{File.expand_path(File.dirname(__dir__))}/init"
+    "#{lz_path}/#{lz_init_path_trailing}"
+  end
+
+  def self.lz_init_path_trailing
+    'init'
   end
 
   def self.lz_template_path
-    "#{File.expand_path(File.dirname(__dir__))}/templates"
+    "#{lz_path}/#{lz_template_path_trailing}"
+  end
+
+  def self.lz_template_path_trailing
+    'templates'
   end
 
   def self.local_path
@@ -64,10 +76,18 @@ class Config
   end
 
   def self.local_template_path
-    "#{local_path}/templates"
+    "#{local_path}/#{local_template_path_trailing}"
+  end
+
+  def self.local_template_path_trailing
+    'templates'
   end
 
   def self.local_lz_template_path
-    "#{local_path}/templates/lz"
+    "#{local_path}/#{local_lz_template_path_trailing}"
+  end
+
+  def self.local_lz_template_path_trailing
+    'templates/lz'
   end
 end
