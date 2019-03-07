@@ -1,12 +1,12 @@
 require 'awesome_print'
 require 'aws-sdk-organizations'
-require 'dlz/environment'
+require 'dlz/config'
 require 'dlz/interface'
 
 # Module to create the organization and organizational units
 module Organization
   def self.deploy
-    create_root unless root_exists?
+    create_root unless root_available?
     # TODO: continue
   end
 
@@ -16,41 +16,41 @@ module Organization
   end
 
   def self.create_root
-    config = Config.load
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
       data = client.create_organization(feature_set: 'ALL').to_h[:organization]
-    rescue StandardError # Too generic
+    rescue Aws::Organizations::Errors::ServiceError
       Interface.panic(message: 'failed to create org root!')
     end
-    Interface.info(message: "created org root at #{config[:root_account_id]}.")
+    Interface.info(message: "created root at #{Config.load[:root_account_id]}.")
     data[:id]
   end
 
-  def self.root_exists?
+  def self.root_available?
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
       data = client.describe_organization.to_h[:organization]
     rescue Aws::Organizations::Errors::AWSOrganizationsNotInUseException
-      return false
+      return false # Organizations not in use
     end
     # Check if current org root, configured org root and calling account are all
     # the same.
-    if data[:master_account_id].to_i == Config.load[:root_account_id]
-      AND data[:master_account_id].to_i == Environment.load[:account]
-      return true
+    if data[:master_account_id].to_i == Config.load[:root_account_id].to_i &&
+       data[:master_account_id].to_i == Config.caller[:account].to_i
+      return true # All conditions met!
     else
       Interface.warn(
-        message: 'org_root or account different from `dlz` configuration!'
+        message: 'org_root or caller different from `dlz` configuration!'
       )
     end
-    false
+
+    false # Organizations in use, but misconfigured
   end
 
   def self.query
-    return Interface.panic(message: 'organization unusable') unless root_exists?
+    return Interface.panic(message: 'org unavailable') unless root_available?
 
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = client.describe_organization.to_h[:organization]

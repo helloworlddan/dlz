@@ -1,12 +1,14 @@
-require 'fileutils'
-require 'dlz/interface'
 require 'awesome_print'
+require 'aws-sdk-core'
+require 'dlz/interface'
+require 'fileutils'
 require 'yaml'
 
 # Configuration singleton for `dlz`
 class Config
   class << self; attr_accessor :data end
   @data = {}
+  @caller = {}
 
   def self.init
     return Interface.panic(message: 'config seems to already exist!') if config?
@@ -38,6 +40,22 @@ class Config
     Interface.info(
       message: "current version is 'dlz-#{Gem.loaded_specs['dlz'].version}'"
     )
+  end
+
+  def self.caller
+    client = Aws::STS::Client.new
+    if @caller.empty?
+      # begin
+        @caller = client.get_caller_identity.to_h
+      # rescue Aws::STS::Errors::ServiceError
+      #   return Interface.panic(message: 'no active credentials found.')
+      # end
+    end
+    @caller
+  end
+
+  def self.whoami
+    ap caller
   end
 
   def self.query

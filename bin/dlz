@@ -15,6 +15,11 @@ class DLZ < Thor
     Config.query
   end
 
+  desc 'whoami', 'Inspect AWS caller identity'
+  def whoami
+    Config.whoami
+  end
+
   desc 'version', 'Print `dlz` version info'
   def version
     Config.version
