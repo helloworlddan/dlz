@@ -6,11 +6,15 @@ require 'dlz/interface'
 # Module to create the organization and organizational units
 module Organization
   def self.deploy
+    return nil unless Config.auth?
+
     create_root unless root_available?
     # TODO: continue
   end
 
   def self.destroy
+    return nil unless Config.auth?
+
     # TODO: implement me
     Interface.error(message: 'I am not implemented yet!')
   end
