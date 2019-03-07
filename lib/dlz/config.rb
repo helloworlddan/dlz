@@ -36,6 +36,10 @@ class Config
     @data
   end
 
+  def self.auth?
+    !caller.empty?
+  end
+
   def self.version
     Interface.info(
       message: "current version is 'dlz-#{Gem.loaded_specs['dlz'].version}'"
@@ -45,11 +49,13 @@ class Config
   def self.caller
     client = Aws::STS::Client.new
     if @caller.empty?
-      # begin
+      begin
         @caller = client.get_caller_identity.to_h
-      # rescue Aws::STS::Errors::ServiceError
-      #   return Interface.panic(message: 'no active credentials found.')
-      # end
+      rescue Aws::Errors::MissingCredentialsError
+        return Interface.panic(message: 'no active credentials found.')
+      rescue Aws::STS::Errors::ExpiredToken
+        return Interface.panic(message: 'credentials have expired.')
+      end
     end
     @caller
   end

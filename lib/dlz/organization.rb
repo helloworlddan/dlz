@@ -16,6 +16,8 @@ module Organization
   end
 
   def self.create_root
+    return nil unless Config.auth?
+
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
@@ -28,6 +30,8 @@ module Organization
   end
 
   def self.root_available?
+    return nil unless Config.auth?
+
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = {}
     begin
@@ -41,7 +45,7 @@ module Organization
        data[:master_account_id].to_i == Config.caller[:account].to_i
       return true # All conditions met!
     else
-      Interface.warn(
+      Interface.panic(
         message: 'org_root or caller different from `dlz` configuration!'
       )
     end
@@ -50,7 +54,8 @@ module Organization
   end
 
   def self.query
-    return Interface.panic(message: 'org unavailable') unless root_available?
+    return nil unless Config.auth?
+    return nil unless root_available?
 
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = client.describe_organization.to_h[:organization]
