@@ -38,11 +38,14 @@ class DLZ < Thor
                    configured in the configuration.
       - 'destroy': `dlz` will attempt to destroy the organization completely.
       - 'query':   `dlz` will query information about the current organization.
+      - 'units':   `dlz` will retrieve a complete list of all children under the
+                   current org root.
   DESC
   def organization(command)
     return Organization.deploy if command.casecmp('deploy').zero?
     return Organization.destroy if command.casecmp('destroy').zero?
     return Organization.query if command.casecmp('query').zero?
+    return Organization.units if command.casecmp('units').zero?
 
     Interface.error(message: "unable to understand '#{command}'")
   end

@@ -65,4 +65,17 @@ module Organization
     data = client.describe_organization.to_h[:organization]
     ap data
   end
+
+  def self.units
+    return nil unless Config.auth?
+    return nil unless root_available?
+
+    client = Aws::Organizations::Client.new(region: 'us-east-1')
+    root_id = client.describe_organization.to_h[:organization][:id]
+    data = client.list_children(
+      child_type: 'ORGANIZATIONAL_UNIT',
+      parent_id: root_id # FIXME: this is wrong...
+    )
+    ap data
+  end
 end
