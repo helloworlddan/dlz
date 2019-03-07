@@ -15,3 +15,18 @@ restricted_roles:
  - Developer
  - Administrator
 
+org_tree:
+  dev: []
+  test: []
+  prod:
+    platform:
+      - acme-platform-logs
+      - acme-platform-scans
+      - acme-platform-ids
+      - acme-platform-services
+    network:
+      - acme-net-hub
+    applications:
+      - acme-app-demo-dev
+      - acme-app-demo-test
+      - acme-app-demo-prod
