@@ -1,3 +1,7 @@
 Metrics/MethodLength:
   Exclude:
     - '**/*.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - '**/*.rb'
