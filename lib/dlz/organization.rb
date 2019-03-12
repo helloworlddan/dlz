@@ -32,13 +32,19 @@ module Organization
     return Interface.warn(message: 'no credentials found.') unless Config.auth?
     return Interface.info(message: 'no org root found.') unless root_available?
 
-    client = Aws::Organizations::Client.new(region: 'us-east-1')
-    root_id = client.list_roots.to_h[:roots].first[:id]
-    data = load_children(parent: root_id)
-    ap data
+    ap tree
   end
 
-  def self.load_children(parent:)
+  def self.tree
+    return nil unless Config.auth?
+    return nil unless root_available?
+
+    client = Aws::Organizations::Client.new(region: 'us-east-1')
+    root_id = client.list_roots.to_h[:roots].first[:id]
+    children(parent: root_id)
+  end
+
+  def self.children(parent:)
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     data = client.list_children(
       child_type: 'ORGANIZATIONAL_UNIT',
@@ -51,7 +57,7 @@ module Organization
       ).to_h[:organizational_unit]
       child[:name] = meta[:name]
       child[:arn] = meta[:arn]
-      children = load_children(parent: child[:id])[:children]
+      children = children(parent: child[:id])[:children]
       child[:children] = children unless children.empty?
     end
     data
