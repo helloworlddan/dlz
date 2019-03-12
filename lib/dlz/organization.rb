@@ -6,31 +6,55 @@ require 'dlz/interface'
 # Module to create the organization and organizational units
 module Organization
   def self.deploy
-    return nil unless Config.auth?
+    return Interface.warn(message: 'no credentials found.') unless Config.auth?
 
     create_root unless root_available?
     # TODO: continue
   end
 
   def self.destroy
-    return nil unless Config.auth?
+    return Interface.warn(message: 'no credentials found.') unless Config.auth?
 
     # TODO: implement me
     Interface.error(message: 'I am not implemented yet!')
   end
 
-  def self.create_root
-    return nil unless Config.auth?
+  def self.query
+    return Interface.warn(message: 'no credentials found.') unless Config.auth?
+    return Interface.info(message: 'no org root found.') unless root_available?
 
     client = Aws::Organizations::Client.new(region: 'us-east-1')
-    data = {}
-    begin
-      data = client.create_organization(feature_set: 'ALL').to_h[:organization]
-    rescue Aws::Organizations::Errors::ServiceError
-      Interface.panic(message: 'failed to create org root!')
+    data = client.describe_organization.to_h[:organization]
+    ap data
+  end
+
+  def self.units
+    return Interface.warn(message: 'no credentials found.') unless Config.auth?
+    return Interface.info(message: 'no org root found.') unless root_available?
+
+    client = Aws::Organizations::Client.new(region: 'us-east-1')
+    root_id = client.list_roots.to_h[:roots].first[:id]
+    data = load_children(parent: root_id)
+    ap data
+  end
+
+  def self.load_children(parent:)
+    client = Aws::Organizations::Client.new(region: 'us-east-1')
+    data = client.list_children(
+      child_type: 'ORGANIZATIONAL_UNIT',
+      parent_id: parent
+    ).to_h
+
+    data[:children].each do |child|
+      meta = client.describe_organizational_unit(
+        organizational_unit_id: child[:id]
+      ).to_h[:organizational_unit]
+      child[:name] = meta[:name]
+      child[:arn] = meta[:arn]
+      children = load_children(parent: child[:id])[:children]
+      child[:children] = children unless children.empty?
     end
-    Interface.info(message: "created root at #{Config.load[:root_account_id]}.")
-    data[:id]
+    data
   end
 
   def self.root_available?
@@ -41,7 +65,7 @@ module Organization
     begin
       data = client.describe_organization.to_h[:organization]
     rescue Aws::Organizations::Errors::AWSOrganizationsNotInUseException
-      return false # Organizations not in use
+      return false
     end
     # Check if current org root, configured org root and calling account are all
     # the same.
@@ -57,25 +81,17 @@ module Organization
     false # Organizations in use, but misconfigured
   end
 
-  def self.query
+  def self.create_root
     return nil unless Config.auth?
-    return nil unless root_available?
 
     client = Aws::Organizations::Client.new(region: 'us-east-1')
-    data = client.describe_organization.to_h[:organization]
-    ap data
-  end
-
-  def self.units
-    return nil unless Config.auth?
-    return nil unless root_available?
-
-    client = Aws::Organizations::Client.new(region: 'us-east-1')
-    root_id = client.describe_organization.to_h[:organization][:id]
-    data = client.list_children(
-      child_type: 'ORGANIZATIONAL_UNIT',
-      parent_id: root_id # FIXME: this is wrong...
-    )
-    ap data
+    data = {}
+    begin
+      data = client.create_organization(feature_set: 'ALL').to_h[:organization]
+    rescue Aws::Organizations::Errors::ServiceError
+      Interface.panic(message: 'failed to create org root!')
+    end
+    Interface.info(message: "created root at #{Config.load[:root_account_id]}.")
+    data[:id]
   end
 end
