@@ -28,10 +28,7 @@ class Config
 
     if @data.empty?
       # Load, deserialize and symbolize keys
-      @data = YAML.load_file("#{local_path}/dlz.yaml")
-                  .each_with_object({}) do |(key, value), obj|
-                    obj[key.to_sym] = value
-                  end
+      @data = symbolize_deep(YAML.load_file("#{local_path}/dlz.yaml"))
     end
     @data
   end
@@ -112,5 +109,11 @@ class Config
 
   def self.local_dlz_template_path_trailing
     'templates/dlz'
+  end
+
+  def self.symbolize_deep(hash)
+    hash.each_with_object({}) do |(k, v), h|
+      h[k.to_sym] = v.is_a?(Hash) ? symbolize_deep(v) : v
+    end
   end
 end
