@@ -41,7 +41,10 @@ module Organization
 
     client = Aws::Organizations::Client.new(region: 'us-east-1')
     root_id = client.list_roots.to_h[:roots].first[:id]
-    children(parent: root_id)[:children]
+    # tree = {}
+    # tree[:org_tree] = children(parent: root_id)[:children]
+    # tree
+    children(parent: root_id)
   end
 
   def self.children(parent:)
@@ -57,7 +60,7 @@ module Organization
       ).to_h[:organizational_unit]
       child[:name] = meta[:name]
       child[:arn] = meta[:arn]
-      children = children(parent: child[:id])[:children]
+      children = children(parent: child[:id])
       child[:children] = children unless children.empty?
     end
   end
