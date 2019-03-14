@@ -15,9 +15,9 @@ restricted_roles:
  - Developer
  - Administrator
 
-org_tree:
-  dev: []
-  test: []
+org:
+  dev: {}
+  test: {}
   prod:
     platform:
       - acme-platform-logs
@@ -30,3 +30,15 @@ org_tree:
       - acme-app-demo-dev
       - acme-app-demo-test
       - acme-app-demo-prod
+
+stacks:
+  - template: dlz/admin_role.yaml
+    targets: :all
+    regions:
+      - us-east-1
+    parameters: {}
+  - template: dlz/protect_resources.yaml
+    targets: :all
+    regions:
+      - us-east-1
+    parameters: {}
