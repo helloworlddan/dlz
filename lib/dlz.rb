@@ -1,5 +1,7 @@
 require 'dlz/accounts'
 require 'dlz/config'
+require 'dlz/drivers/organizations'
+require 'dlz/drivers/stacksets'
 require 'dlz/interface'
 require 'dlz/organization'
 require 'dlz/renderer'
