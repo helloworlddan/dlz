@@ -20,7 +20,7 @@ Resources:
               - iam:UpdateRole
               - iam:UpdateRoleDescription
             Resources:
-              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/dlzadm'
+              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/dlz/dlzadm'
 <% cfg[:restricted_roles].each do |role| -%>
               - !Sub 'arn:aws:iam::${AWS::AccountId}:role/<%= role %>'
 <% end -%>

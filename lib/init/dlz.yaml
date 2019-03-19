@@ -3,6 +3,7 @@
 # Account ID of organization master payer, this will be setup as organization
 # root. It will also act as trusted authority to assume the admin roles from.
 root_account_id: 123456789012
+root_account_name: acme-platform-root
 
 # Pre-configured external ID to harden access to cross-account admin role.
 # CHANGE THIS!
@@ -16,29 +17,44 @@ restricted_roles:
  - Administrator
 
 org:
-  dev: {}
-  test: {}
+  accounts:
+    - acme-platform-root
+  dev:
+    accounts: []
+  test:
+    accounts: []
   prod:
-    platform:
-      - acme-platform-logs
-      - acme-platform-scans
-      - acme-platform-ids
-      - acme-platform-services
-    network:
-      - acme-net-hub
+    platform: # Transverse
+      accounts:
+        - acme-platform-logs
+        - acme-platform-scans
+        - acme-platform-ids
+        - acme-platform-services
+    network: # Transverse
+      accounts:
+        - acme-net-hub
     applications:
-      - acme-app-demo-dev
-      - acme-app-demo-test
-      - acme-app-demo-prod
+      accounts:
+        - acme-app-demo-dev
+        - acme-app-demo-test
+        - acme-app-demo-prod
 
 stacks:
   - template: dlz/admin_role.yaml
-    targets: :all
+    targets:
+      - :all
     regions:
-      - us-east-1
+      - :us-east-1
+    parameters: {}
+  - template: dlz/stack_set_role.yaml
+    targets:
+      - acme-platform-root
+    regions:
+      - :us-east-1
     parameters: {}
   - template: dlz/protect_resources.yaml
-    targets: :all
+    targets:
+      - :all
     regions:
-      - us-east-1
+      - :us-east-1
     parameters: {}

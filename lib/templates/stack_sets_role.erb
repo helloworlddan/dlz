@@ -1,0 +1,25 @@
+Description: >
+  This stack will allow CloudFormation to assume the 'dlzadm' role in target accounts.
+
+Resources:
+  dlzswitchrole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /dlz/
+      RoleName: dlzswitchrole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              Service: cloudformation.amazonaws.com
+
+      Policies:
+        - PolicyName: dlzswitchrole-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: "sts:AssumeRole"
+                Resource: "arn:aws:iam::*:role/dlz/dlzadm"
